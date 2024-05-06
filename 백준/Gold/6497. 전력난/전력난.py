@@ -1,14 +1,14 @@
 # 어두운 길 > 전력난
-
-
-def find(x):
+import sys
+input = sys.stdin.readline
+def find(par, x):
     if par[x] != x:
-        par[x] = find(par[x])
+        par[x] = find(par, par[x])
     return par[x]
 
-def union(a, b):
-    a = find(a)
-    b = find(b)
+def union(par, a, b):
+    a = find(par, a)
+    b = find(par, b)
     if a < b: par[b] = a
     else: par[a] = b
 
@@ -24,9 +24,8 @@ while True:
     data.sort()
     res = 0
     for dist, a, b in data:
-        if find(a) != find(b):
-            union(a, b)
+        if find(par, a) != find(par, b):
+            union(par, a, b)
         else:
             res += dist
     print(res)
-            
