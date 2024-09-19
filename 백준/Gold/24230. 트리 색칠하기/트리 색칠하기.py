@@ -12,8 +12,7 @@ count = 0
 visited = set()
 while stack:
     current, parrentColor = stack.pop()
-    if current in visited: continue # 기우?
-    else: visited.add(current)
+    visited.add(current)
     if colors[current] != parrentColor:
         count += 1
     for node in graph[current]:
