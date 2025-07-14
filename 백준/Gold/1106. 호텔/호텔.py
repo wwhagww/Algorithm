@@ -1,7 +1,8 @@
 G, N = map(int, input().split())
 cities = [tuple(map(int, input().split())) for _ in range(N)]
+cities.sort(key=lambda x: -x[1]/x[0])
 
-MAX_COST = 100 * 1000 + 1
+MAX_COST = (G//cities[0][1]+1) * cities[0][0] + 1
 dp = [0] * MAX_COST
 
 res = None
