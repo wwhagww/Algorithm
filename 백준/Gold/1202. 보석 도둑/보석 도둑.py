@@ -1,21 +1,19 @@
-from bisect import bisect_left
+import heapq
+
 N, K = map(int, input().split())
 gems = [tuple(map(int, input().split())) for _ in range(N)]
 bags = [int(input()) for _ in range(K)]
 
-gems.sort(key=lambda x: -x[1])
-bags.sort()
+gems.sort()
+bags.sort() 
 
-visit = [0]*K
 res = 0
-for weight, value in gems:
-    idx = bisect_left(bags, weight)
-    if idx >= K: continue
-    while visit[idx] != 0:
-        visit[idx] += 1
-        idx += visit[idx]-1
-        if idx >= K: break
-    else:
-        visit[idx] += 1
-        res += value
+heap = []
+i = 0
+for bag in bags:
+    while i < N and gems[i][0] <= bag:
+        heapq.heappush(heap, -gems[i][1])
+        i += 1
+    if heap:
+        res += -heapq.heappop(heap)
 print(res)
