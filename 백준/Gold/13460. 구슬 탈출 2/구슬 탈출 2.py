@@ -22,7 +22,10 @@ def move_one(x, y, dx, dy):
                     
 dx = [1,-1,0,0]
 dy = [0,0,1,-1]
-deq = deque([(rx,ry,bx,by, 0), ])
+deq = deque()
+deq.append((rx,ry,bx,by,0))
+visited = set()
+visited.add((rx,ry,bx,by))
 while deq:
     rx,ry,bx,by, cnt = deq.popleft()
     
@@ -38,7 +41,8 @@ while deq:
                 nrx, nry = nrx-dx[i], nry-dy[i]
             else:
                 nbx, nby = nbx-dx[i], nby-dy[i]
-        if cnt < 10:
+        if cnt < 10 and (nrx, nry, nbx, nby) not in visited:
+            visited.add((nrx, nry, nbx, nby))
             deq.append((nrx, nry, nbx, nby, cnt+1))
 else:
     print(-1)
