@@ -1,3 +1,4 @@
+import sys; input=sys.stdin.readline
 N = int(input())
 size = 1
 while size < N: size *= 2
