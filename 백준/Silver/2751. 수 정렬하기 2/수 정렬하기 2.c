@@ -1,71 +1,54 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-void prt_arr(int *arr, int N) {
-    for (int i = 0; i < N; i++) {
-        printf("%d\n", arr[i]);
-    }
+void swap(int *a, int *b);
+void scnArr(int *arr, int N);
+void prtArr(int *arr, int N);
+void sortQuick(int arr[], int *ed);
+int *randPointer(int *st, int *ed);
+
+int main() {
+    srand(time(NULL));
+    int len;
+    scanf("%d", &len);
+    int arr[len];
+    scnArr(arr, len);
+    sortQuick(arr, &arr[len-1]);
+    prtArr(arr, len);
+    return 0;
 }
-void scn_arr(int *arr, int N) {
-    for (int i = 0; i < N; i++) {
-        scanf("%d", &arr[i]);
+
+void sortQuick(int *st, int *ed) {
+    if (ed <= st) return;
+    swap(randPointer(st, ed), ed);
+    int piv = *ed;
+    int *left = st, *right = st;
+    while (right < ed) {
+        if (*right < piv) swap(left++, right++);
+        else right++;
     }
+    swap(left, ed);
+    sortQuick(st, left-1);
+    sortQuick(left+1, ed);
 }
+
+int *randPointer(int *a, int *b) {
+    return a + rand() % (b-a+1);
+}
+
 void swap(int *a, int *b) {
     int tmp = *a;
     *a = *b;
     *b = tmp;
 }
-int max(int *arr, int N) {
-    int max = arr[0];
+void prtArr(int *arr, int N) {
     for (int i = 0; i < N; i++) {
-        if (arr[i] > max)
-            max = arr[i];
+        printf("%d ", arr[i]);
     }
-    return max;
 }
-int min(int *arr, int N) {
-    int min = arr[0];
+void scnArr(int *arr, int N) {
     for (int i = 0; i < N; i++) {
-        if (arr[i] < min)
-            min = arr[i];
+        scanf("%d", &arr[i]);
     }
-    return min;
-}
-
-void sort_bubble(int *arr, int N);
-void sort_selection(int *arr, int N);
-void sort_insertion(int *arr, int N);
-void sort_counting(int *arr, int N);
-
-int main(int argc, char **argv) {
-    int N;
-    scanf("%d", &N);
-    int arr[N];
-    scn_arr(arr, N);
-    if (N>1) sort_counting(arr, N);
-    prt_arr(arr, N);
-    return 0;
-}
-
-void sort_counting(int *arr, int N) {
-    int mx = max(arr, N);
-    int mn = min(arr, N);
-    int len = mx - mn + 1;
-    int arr_idx[len]; // 인덱스 담을 배열
-    for (int i = 0; i < len; i++) {
-        arr_idx[i] = 0;
-    } // 인덱스 배열 0으로 초기화
-    for (int i = 0; i < N; i++) {
-        arr_idx[arr[i]-mn] = 1;
-    } // 인덱스 배열의 값-최솟값 자리에 1 대입
-    for (int i = 1; i < len; i++) {
-        arr_idx[i] += arr_idx[i-1];
-    } // 점화식 이용해 값-최솟값 자리에 인덱스+1 담음
-    int arr_tmp[N]; // 임시 배열
-    for (int i = 0; i < N; i++) {
-        arr_tmp[arr_idx[arr[i]-mn]-1] = arr[i];
-    } // 임시 배열에 정렬
-    for (int i = 0; i < N; i++) {
-        arr[i] = arr_tmp[i];
-    } // 배열 복사
 }
