@@ -1,51 +1,41 @@
 import sys; input=sys.stdin.readline
+
 N = int(input())
 size = 1
-while size < N: size *= 2
-arr = list(map(int, input().split()))
+while size < N: size <<= 1
+A = list(map(int, input().split()))
 
-def f(a, b):
-    if a is None: return b
-    if b is None: return a
-    ia, va = a
-    ib, vb = b
-    if va < vb:
-        return a
-    elif va == vb:
-        return (min(ia,ib), va)
-    else:
-        return b
+INF = 10**9+1
+tree = [(INF, INF)] * (2*size)
 
-tree = [None]*(size*2)
-for i in range(N):
-    tree[size+i] = (i, arr[i])
+for i, v in enumerate(A):
+    tree[size + i] = (v, i)
+
 for i in reversed(range(1,size)):
-    tree[i] = f(tree[2*i], tree[2*i+1])
-
-# print(tree)
+    tree[i] = min(tree[i << 1], tree[i << 1 | 1])
 
 M = int(input())
 for _ in range(M):
-    command, a, b = map(int, input().split())
+    com, a, b = map(int, input().split())
 
-    if command == 1: # 갱신
-        i, v = a-1, b
-        tree[size+i] = (i, b)
-        idx = (size+i) // 2
-        while idx:
-            tree[idx] = f(tree[2*idx], tree[2*idx+1])
-            idx //= 2
+    if com == 1: # 갱신
+        i = a - 1
+        p = size + i
+        tree[p] = (b, i)
+        p >>= 1
+        while p:
+            tree[p] = min(tree[p<<1], tree[p<<1 | 1])
+            p >>= 1
 
-    if command == 2: # 쿼리
-        l, r = a-1 + size, b-1 + size
-        res = None
+    elif com == 2: # 쿼리
+        l, r = (a-1) + size, (b-1) + size
+        res = (INF, INF)
         while l <= r:
-            if l % 2 == 1:
-                res = f(res, tree[l])
+            if l & 1:
+                res = min(res, tree[l])
                 l += 1
-            if r % 2 == 0:
-                res = f(res, tree[r])
+            if not (r & 1):
+                res = min(res, tree[r])
                 r -= 1
-            l //= 2
-            r //= 2
-        print(res[0]+1)
+            l >>= 1; r >>= 1
+        print(res[1]+1)
