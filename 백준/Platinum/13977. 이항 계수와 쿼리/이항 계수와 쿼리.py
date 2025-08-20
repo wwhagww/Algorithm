@@ -1,3 +1,4 @@
+import sys; input=sys.stdin.readline
 MOD = 1_000_000_007
 fact = list(range(4_000_000 + 1))
 for i in range(2, 4_000_000 + 1):
