@@ -9,7 +9,7 @@ for _ in range(E):
 
 disc = [-1]*(V+1)
 time = 0
-edges_cut = set()
+edges_cut = []
 
 def dfs(cur, p):
     global time
@@ -22,11 +22,11 @@ def dfs(cur, p):
         else:
             low_nxt = dfs(nxt, cur)
             if low_nxt > disc[cur]:
-                edges_cut.add((cur, nxt) if cur < nxt else (nxt, cur))
+                edges_cut.append((cur, nxt) if cur < nxt else (nxt, cur))
             low = min(low, low_nxt)
     return low
 dfs(1, None)
 
 print(len(edges_cut))
-for a, b in sorted(list(edges_cut)):
+for a, b in sorted(edges_cut):
     print(a,b)
