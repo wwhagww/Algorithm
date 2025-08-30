@@ -11,13 +11,11 @@ while cur < G:
         if i % 2 == 0:
             dp[i] = min(
                 dp[cur]+abs(cur - i),
-                dp[cur]+abs(cur*2 - i), 
                 dp[i//2]
                 )
         else:
             dp[i] = min(
                 dp[cur]+abs(cur-i), 
-                dp[cur]+abs(cur*2-i), 
                 dp[(i+1)//2] + 1,
                 dp[(i-1)//2] + 1 
                 )
