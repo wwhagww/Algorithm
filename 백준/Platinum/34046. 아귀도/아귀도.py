@@ -1,13 +1,12 @@
 from collections import deque
+import sys; input=sys.stdin.readline
 N = int(input())
-A = list(map(lambda x: int(x), input().split()))
+A = list(map(int, input().split()))
 
 idx = [None]*N
 for i, n in enumerate(A):
     if n == 0: continue
     idx[n-1] = i
-
-res = 1
 
 tree = [[] for _ in range(N)]
 for _ in range(N-1):
@@ -16,22 +15,22 @@ for _ in range(N-1):
     tree[a].append(b)
     tree[b].append(a)
 
-pos = [0]*N # 적어도 이 인덱스 이후에 들어가야함
 deq = deque([(0, 0)]) # 최소 인덱스, 노드
-lst = []
-visited = set()
+lst = [] # 적어도 이 인덱스 이후에 들어가야함
+visited = [False]*N
 while deq:
     p, node = deq.popleft()
-    visited.add(node)
+    visited[node] = True
     if idx[node] is None:
-        pos[node] = p
         lst.append(p)
     else: # 고정점
         p = max(p, idx[node])
-    deq.extend([(p, child) for child in tree[node] if child not in visited])
+    deq.extend([(p, child) for child in tree[node] if not visited[child]])
+    # 큐로 bfs 순회하므로 부모 체크할 필요 없음
 
 lst.sort(reverse=True)
 
+res = 1
 cnt_zero = 0
 prev = N
 for p in lst:
