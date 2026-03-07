@@ -1,4 +1,8 @@
 -- 코드를 입력하세요
-select round(avg(daily_fee),0) as AVERAGE_FEE
+
+
+select round(avg(
+case
+when car_type='suv' then daily_fee
+end)) as average_fee
 from car_rental_company_car
-where car_type='suv';
